@@ -4,7 +4,7 @@ use std::io::Write;
 use std::path::PathBuf;
 use walkdir::WalkDir;
 
-use crate::commit_data::{Commit, Utc};
+use crate::commit_data::*;
 
 pub fn init() -> anyhow::Result<()> {
     let brdv_dir = PathBuf::from(".brdv");
@@ -45,10 +45,7 @@ pub fn commit(message: &str) -> anyhow::Result<()> {
 
     let mut tree_data = Vec::new();
 
-    for entry in WalkDir::new(".")
-        .into_iter()
-        .filter_map(|e| e.ok())
-    {
+    for entry in WalkDir::new(".").into_iter().filter_map(|e| e.ok()) {
         let path = entry.path();
 
         if path.starts_with(&brdv_dir) || path.is_dir() {
@@ -89,7 +86,20 @@ pub fn commit(message: &str) -> anyhow::Result<()> {
 }
 
 pub fn log() -> anyhow::Result<()> {
-    println!("Printing logs");
+    let brdv_dir = PathBuf::from(".brdv");
+    let mut current = std::fs::read_to_string(brdv_dir.join("HEAD"))?;
+
+    while !current.is_empty() {
+        let obj_path = brdv_dir.join(format!("objects/{:?}", current));
+        let bytes = std::fs::read(&obj_path)?;
+        let commit: Commit = bincode::deserialize(&bytes)?;
+
+        let mut formatted = commit.format();
+        formatted = formatted.replace("HASH_PLACEHOLDER", &current);
+        println!("{}", formatted);
+
+        current = commit.parent.unwrap_or_default();
+    }
     Ok(())
 }
 

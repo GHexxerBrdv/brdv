@@ -3,9 +3,11 @@ use std::path::PathBuf;
 
 mod commit_data;
 mod controller;
+mod updation;
 
 use crate::commit_data::Commit;
 use crate::controller::{commit, init, log};
+use crate::updation::update;
 
 #[derive(Parser)]
 #[command(name = "brdv", about = "A Project repository manager")]
@@ -22,6 +24,7 @@ enum Command {
         message: String,
     },
     Log,
+    Update,
 }
 
 fn main() -> anyhow::Result<()> {
@@ -31,6 +34,7 @@ fn main() -> anyhow::Result<()> {
         Command::Init => init(),
         Command::Commit { message } => commit(&message),
         Command::Log => log(),
+        Command::Update => update(),
     };
 
     Ok(())

@@ -10,7 +10,7 @@ pub struct Commit {
     pub timestamp: DateTime<Utc>,
 }
 
-trait DisplayCommit {
+pub trait DisplayCommit {
     fn format(&self) -> String;
 }
 
