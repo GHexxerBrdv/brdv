@@ -81,7 +81,7 @@ pub fn commit(message: &str) -> anyhow::Result<()> {
 
     std::fs::write(head_path, commit_hash.as_bytes())?;
     // let commit_data;
-    println!("All the code pushed to the repository, {}", commit_hash);
+    println!("Commit hash: {}", commit_hash);
     Ok(())
 }
 
