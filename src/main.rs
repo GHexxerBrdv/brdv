@@ -29,12 +29,12 @@ enum Command {
 fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
-    let _ = match cli.command {
+    let response = match cli.command {
         Command::Init => init(),
         Command::Commit { message } => commit(&message),
         Command::Log => log(),
         Command::Update => update(),
     };
-
+    println!("Update status: {:?}", response);
     Ok(())
 }

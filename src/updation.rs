@@ -10,6 +10,6 @@ pub fn update() -> anyhow::Result<()> {
         .build()?
         .update()?;
 
-    println!("Update status: {:?}", status);
+    println!("Update status: {}", status.version());
     Ok(())
 }
