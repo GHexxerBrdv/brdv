@@ -5,7 +5,6 @@ mod commit_data;
 mod controller;
 mod updation;
 
-use crate::commit_data::Commit;
 use crate::controller::{commit, init, log};
 use crate::updation::update;
 
@@ -30,7 +29,7 @@ enum Command {
 fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
-    match cli.command {
+    let _ = match cli.command {
         Command::Init => init(),
         Command::Commit { message } => commit(&message),
         Command::Log => log(),
